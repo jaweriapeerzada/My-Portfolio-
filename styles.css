@@ -894,12 +894,16 @@ body.detail-open{overflow:hidden}
     .brand-name .surname{font-size:7px;padding-inline:6px}
 }
 
-/* Keep About immediately after the hero while preserving the Achievements section. */
+/* Keep the content and navigation order consistent across desktop and mobile. */
 main{display:flex;flex-direction:column}
 main>section{order:4}
 main>.hero-reference{order:1}
-main>.about{order:2}
-main>.achievements{order:3}
+main>.services{order:2}
+main>.work{order:3}
+main>.reviews{order:4}
+main>.quote-section{order:4}
+main>.achievements{order:5}
+main>.contact{order:6}
 
 /* Final hero alignment: match the tracking line to the navigation and round the CTA. */
 .hero-marquee{background:rgba(26,15,48,.92);border-top-color:rgba(173,122,251,.58);border-bottom-color:rgba(173,122,251,.58)}
