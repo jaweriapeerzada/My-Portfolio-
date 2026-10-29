@@ -1355,7 +1355,7 @@ a,button,.filter,.project-card,.review-card,.hero-service-card,.role-btn,.menu-b
 @media(max-width:900px){.hero-reference{padding-bottom:230px!important}}
 
 /* simple solid purple square frame, no stroke */
-.photo-frame{aspect-ratio:1/1!important;border:0!important;border-radius:0!important;background:#ad7afb!important;box-shadow:none!important}
+.photo-frame{aspect-ratio:1/1!important;border:0!important;border-radius:0!important;background:#3d2266!important;box-shadow:none!important}
 .photo-frame .hero-model{object-fit:cover;object-position:center 8%}
 
 /* remove nav underline & marquee band; photo sits lower with space above head */
