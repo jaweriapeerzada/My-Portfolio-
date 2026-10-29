@@ -1281,3 +1281,143 @@ main>.contact{order:6}
     .reference-art .service-pack,
     .reference-art .service-social{transform:translateY(-135px)}
 }
+
+/* ===== Cleanup & additions ===== */
+/* normal cursor everywhere */
+body,a,button,.filter,.project-card,.review-card,.hero-service-card{cursor:auto}
+a,button,.filter,.project-card,.review-card,.hero-service-card,.role-btn,.menu-btn{cursor:pointer}
+/* no moving decorations / background lines */
+.hero-grid,.hero-dots,.photo-ring,.photo-halo{display:none!important}
+.hero-service-card{animation:none!important}
+.hero-service-card::before{display:none}
+.hero-reference .eyebrow:hover{transform:none}
+.hero-reference h1:hover .type-line.accent{background-position:0 0}
+
+/* purple symbol in the top badge */
+.eyebrow-star{width:18px;height:18px;flex:none;color:var(--purple);filter:drop-shadow(0 0 6px rgba(173,122,251,.55))}
+
+/* framed profile photo */
+.reference-art{padding-right:0}
+@media(min-width:901px){.reference-art{display:flex;align-items:center;justify-content:center}}
+.photo-frame{position:relative;z-index:2;width:min(86%,430px);aspect-ratio:4/5;border-radius:220px 220px 32px 32px;border:6px solid #fff;background:linear-gradient(160deg,#f1e6ff 0%,#d3b6fb 55%,#ad7afb 100%);box-shadow:0 0 0 1px rgba(111,66,163,.25),0 30px 70px rgba(47,27,76,.28);overflow:hidden}
+.photo-frame .hero-model{position:absolute;inset:0;width:100%;height:100%;top:0;margin:0;object-fit:cover;object-position:center top;filter:none;border-radius:0}
+@media(max-width:900px){.photo-frame{margin:60px auto 0;width:min(70%,340px)}}
+
+/* contact form (replaces Tailwind) */
+.contact-form .form-label{display:block;margin:7px 0 8px}
+.contact-form .form-field{width:100%;padding:12px 16px;border-radius:12px}
+.contact-form textarea.form-field{resize:none;height:auto}
+.contact-submit{width:100%;padding:14px;border-radius:12px;background:#9333ea;color:#fff;font-weight:600;transition:background .2s}
+.contact-submit:hover{background:#7e22ce}
+
+/* WhatsApp button */
+.wa-fab{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;background:linear-gradient(145deg,#b98cff,#8a4fe0);color:#fff;display:grid;place-items:center;z-index:900;box-shadow:0 12px 30px rgba(111,66,163,.45);transition:transform .2s}
+.wa-fab svg{width:30px;height:30px}
+.wa-fab:hover{transform:scale(1.07)}
+
+/* Chatbot */
+.bot-fab{position:fixed;right:20px;bottom:90px;width:58px;height:58px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;z-index:900;box-shadow:0 12px 30px rgba(33,14,61,.4);transition:transform .2s}
+.bot-fab svg{width:27px;height:27px}
+.bot-fab:hover{transform:scale(1.07)}
+.bot{position:fixed;right:20px;bottom:160px;width:min(360px,calc(100vw - 32px));height:min(480px,calc(100vh - 190px));background:#fff;border-radius:22px;box-shadow:0 24px 70px rgba(33,14,61,.32);display:none;flex-direction:column;overflow:hidden;z-index:950;border:1px solid rgba(173,122,251,.3)}
+.bot.open{display:flex}
+.bot-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--deep);color:#fff}
+.bot-head strong{display:block;font-size:15px}
+.bot-head small{color:#cdbde1;font-size:12px}
+.bot-avatar{width:38px;height:38px;border-radius:50%;background:var(--purple);color:var(--ink);display:grid;place-items:center;font:800 17px Manrope}
+.bot-close{margin-left:auto;font-size:26px;line-height:1;color:#fff;padding:0 4px}
+.bot-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#faf6ff}
+.msg{max-width:85%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.45;white-space:pre-line}
+.msg.bot-msg{background:#fff;border:1px solid rgba(173,122,251,.25);color:var(--ink);border-bottom-left-radius:4px;align-self:flex-start}
+.msg.user-msg{background:var(--purple);color:var(--ink);font-weight:600;border-bottom-right-radius:4px;align-self:flex-end}
+.msg a{color:#7c3fd6;font-weight:700;text-decoration:underline}
+.bot-chips{display:flex;flex-wrap:wrap;gap:8px;padding:10px 14px 4px;background:#faf6ff}
+.bot-chips button{padding:7px 12px;border-radius:99px;border:1px solid var(--purple);color:#5b2fa0;font-size:13px;font-weight:600;background:#fff}
+.bot-chips button:hover{background:var(--purple);color:var(--ink)}
+.bot-form{display:flex;gap:8px;padding:12px;border-top:1px solid rgba(173,122,251,.2);background:#fff}
+.bot-form input{flex:1;min-width:0;border:1px solid rgba(33,14,61,.15);border-radius:99px;padding:10px 14px;font:inherit;font-size:14px;outline:none}
+.bot-form input:focus{border-color:var(--purple)}
+.bot-form button{width:40px;height:40px;border-radius:50%;background:var(--purple);color:var(--ink);font-weight:800}
+@media(max-width:620px){.wa-fab,.bot-fab{right:14px}.wa-fab{bottom:14px}.bot-fab{bottom:82px}.bot{right:14px;bottom:150px}}
+
+/* mobile hero art: photo on top, service cards in a tidy 2x2 grid below */
+@media(max-width:900px){
+  .reference-art{display:grid!important;grid-template-columns:1fr 1fr;gap:12px;min-height:0!important;height:auto!important;transform:none!important;padding:0!important;margin-top:24px}
+  .reference-art .photo-frame{order:-1;grid-column:1/-1;margin:0 auto 8px;width:min(78%,340px)}
+  .reference-art .hero-service-card{position:static!important;transform:none!important;rotate:0deg;width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:1/1;max-width:170px;margin:0 auto;inset:auto!important}
+  .reference-art .hero-service-card small{max-width:none}
+}
+@media(max-width:900px){
+  .reference-art{grid-template-areas:none!important;grid-template-rows:auto!important;grid-auto-flow:row}
+  .reference-art .photo-frame{grid-area:1/1/2/3!important;order:0}
+  .reference-art .service-logo,.reference-art .service-brand,.reference-art .service-pack,.reference-art .service-social{grid-area:auto!important;position:static!important;display:flex!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important}
+}
+@media(max-width:900px){.hero-reference{padding-bottom:230px!important}}
+
+/* simple solid purple square frame, no stroke */
+.photo-frame{aspect-ratio:1/1!important;border:0!important;border-radius:0!important;background:#ad7afb!important;box-shadow:none!important}
+.photo-frame .hero-model{object-fit:cover;object-position:center 8%}
+
+/* remove nav underline & marquee band; photo sits lower with space above head */
+.site-header::before,.site-header::after{display:none!important}
+.hero-marquee{display:none!important}
+.photo-frame{padding-top:12%}
+.photo-frame .hero-model{inset:auto 0 0 0;top:auto;height:88%;width:100%;object-fit:contain;object-position:center bottom}
+@media(max-width:900px){.hero-reference{padding-bottom:80px!important}}
+.photo-frame{padding-top:0}
+.photo-frame .hero-model{height:94%;width:auto;left:50%;right:auto;transform:translateX(-50%)!important;object-fit:contain;max-width:none}
+
+/* Purple portrait frame with soft, consistent corners. */
+.photo-frame{background:var(--purple)!important;border-radius:20px!important}
+.photo-frame .hero-model,
+.photo-frame .hero-model:hover,
+.photo-frame .hero-model:active{transform:translateX(-50%)!important}
+
+/* Keep the work dropdown visually attached to the navigation links. */
+.site-header{justify-content:flex-start}
+.brand-name .signature-name{font-family:'Allura',cursive}
+.desktop-nav{margin-left:clamp(20px,4vw,48px);gap:3px}
+.desktop-nav a{padding-inline:12px}
+.role-select{margin-left:clamp(12px,1.8vw,22px)}
+
+@media(max-width:1100px) and (min-width:901px){
+  .desktop-nav{margin-left:20px;gap:0}
+  .desktop-nav a{padding-inline:8px;font-size:11px}
+  .role-select{margin-left:12px}
+  .role-btn{padding-inline:11px}
+}
+
+@media(min-width:901px){
+  .site-header{width:fit-content;max-width:calc(100% - 32px);height:60px;padding-inline:20px}
+  .brand-name .signature-name{font-size:38px}
+  .desktop-nav{margin-left:24px;gap:0}
+  .desktop-nav a{padding:9px 10px;font-size:12px}
+  .role-select{margin-left:14px}
+  .role-btn{padding:9px 12px}
+
+  .service-logo{left:calc((100% - min(86%, 430px))/2 - 78px);top:calc((100% - min(86%, 430px))/2 - 78px)}
+  .service-brand{right:calc((100% - min(86%, 430px))/2 - 78px);top:calc((100% - min(86%, 430px))/2 - 78px)}
+  .service-pack{left:calc((100% - min(86%, 430px))/2 - 78px);bottom:calc((100% - min(86%, 430px))/2 - 78px)}
+  .service-social{right:calc((100% - min(86%, 430px))/2 - 78px);bottom:calc((100% - min(86%, 430px))/2 - 78px)}
+}
+
+.hero-service-card,
+.hero-service-card:hover,
+.hero-service-card:active,
+.hero-service-card.active-card{
+  transform:none!important;
+  transition:none!important;
+  margin:0!important;
+  box-shadow:0 16px 38px rgba(47,27,76,.12)!important;
+}
+
+.hero-service-card{cursor:default!important}
+.hero-service-card.active-card{background:rgba(255,255,255,.82)!important;border-color:rgba(255,255,255,.9)!important}
+.hero-service-card.active-card .service-icon{background:none!important;color:#6f42a3!important}
+
+@media(max-width:767.98px){
+  .reference-art .service-logo,
+  .reference-art .service-brand,
+  .reference-art .service-pack,
+  .reference-art .service-social{transform:none!important}
+}
