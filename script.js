@@ -1,69 +1,3 @@
-const loader=document.querySelector('.page-loader');
-const loaderPercent=document.querySelector('.loader-percent');
-const loaderBarSpan=document.querySelector('.loader-bar span');
-// Types the hero headline out line by line, like it's being written live.
-function typeHeroTitle(){
-  const lines=[...document.querySelectorAll('.hero-reference h1 .type-line')];
-  let li=0;
-    const typeLine=()=>{
-    if(li>=lines.length)return;
-    const el=lines[li];
-    const text=el.dataset.text||'';
-    el.classList.add('typing');
-    let ci=0;
-    const iv=setInterval(()=>{
-      el.textContent=text.slice(0,ci+1);
-      ci++;
-      if(ci>=text.length){
-        clearInterval(iv);
-        el.classList.remove('typing');
-        li++;
-        setTimeout(typeLine,220);
-      }
-    },30+Math.random()*16);
-  };
-  typeLine();
-}
-
-(function runLoader(){
-  let p=0;
-  const step=()=>{
-    p+=Math.random()*14+6;
-    if(p>=100){p=100;if(loaderPercent)loaderPercent.textContent='100%';if(loaderBarSpan)loaderBarSpan.style.width='100%';typeHeroTitle();setTimeout(()=>loader.classList.add('done'),450);return;}
-    if(loaderPercent)loaderPercent.textContent=Math.floor(p)+'%';
-    if(loaderBarSpan)loaderBarSpan.style.width=p+'%';
-    setTimeout(step,120+Math.random()*90);
-  };
-  step();
-})();
-window.addEventListener('load',()=>{ if(loaderPercent&&loaderPercent.textContent==='0%')loaderPercent.textContent='100%'; });
-
-const cursor=document.querySelector('.cursor-glow');
-let curX=window.innerWidth/2,curY=window.innerHeight/2,mouseX=curX,mouseY=curY;
-window.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;});
-const hoverSelector='a, button, .filter, .project-card, .magnetic, .review-card, .hero-service-card';
-const pointerFine=window.matchMedia('(pointer:fine)').matches;
-function animateCursor(){
-  curX+=(mouseX-curX)*.18;
-  curY+=(mouseY-curY)*.18;
-  // Use a GPU-accelerated transform instead of left/top so the trail doesn't
-  // trigger layout on every frame — this is what was making it feel jerky.
-  if(cursor)cursor.style.transform=`translate3d(${curX}px, ${curY}px, 0) translate(-50%, -50%)`;
-  // Re-check what's actually under the pointer every frame instead of relying only on
-  // mouseenter/mouseleave — those never fire when a click (e.g. a nav link) smooth-scrolls
-  // the page under a stationary mouse, which is what was leaving the hover state "stuck".
-  if(cursor&&pointerFine){
-    const el=document.elementFromPoint(mouseX,mouseY);
-    cursor.classList.toggle('hovering',!!(el&&el.closest(hoverSelector)));
-  }
-  requestAnimationFrame(animateCursor);
-}
-if(cursor)animateCursor();
-if(pointerFine){
-  document.addEventListener('mousedown',()=>cursor&&cursor.classList.add('pressing'));
-  document.addEventListener('mouseup',()=>cursor&&cursor.classList.remove('pressing'));
-}
-
 const observer=new IntersectionObserver(entries=>{
   entries.forEach(entry=>{entry.target.classList.toggle('visible',entry.isIntersecting)})
 },{threshold:.12});
@@ -142,17 +76,6 @@ document.querySelectorAll('img').forEach(img=>{
   img.addEventListener('error',()=>img.classList.add('image-missing'),{once:true});
 });
 
-document.querySelectorAll('.magnetic').forEach(el=>{
-  el.addEventListener('mousemove',e=>{
-    if(window.innerWidth<900)return;
-    const r=el.getBoundingClientRect();
-    const x=(e.clientX-r.left-r.width/2)*.14;
-    const y=(e.clientY-r.top-r.height/2)*.14;
-    el.style.transform=`translate(${x}px,${y}px)`;
-  });
-  el.addEventListener('mouseleave',()=>el.style.transform='translate(0,0)');
-});
-
 document.getElementById('year').textContent=new Date().getFullYear();
 
 // Clicking a testimonial focuses it and blurs the rest; clicking it again resets.
@@ -190,15 +113,6 @@ document.querySelectorAll('.project-card[data-project]').forEach(card=>card.addE
   openProject(card.dataset.project);
 }));
 
-// Hero service cards: click to highlight/select one (click again to deselect)
-document.querySelectorAll('.hero-service-card').forEach(card=>{
-  card.addEventListener('click',()=>{
-    const alreadyActive=card.classList.contains('active-card');
-    document.querySelectorAll('.hero-service-card').forEach(c=>c.classList.remove('active-card'));
-    if(!alreadyActive)card.classList.add('active-card');
-  });
-});
-
 // Navbar "Explore Work" dropdown: pick a role, jump to Work section pre-filtered
 const roleSelect=document.querySelector('.role-select');
 const roleBtn=document.getElementById('roleBtn');
@@ -225,3 +139,38 @@ if(roleBtn&&roleSelect){
 }
 document.getElementById('projectBack').addEventListener('click',closeProject);
 window.addEventListener('keydown',e=>{if(e.key==='Escape'&&detail.classList.contains('open'))closeProject()});
+
+// ===== Chat assistant =====
+(function(){
+  const fab=document.getElementById('botFab'),box=document.getElementById('bot'),body=document.getElementById('botBody'),
+        chips=document.getElementById('botChips'),form=document.getElementById('botForm'),input=document.getElementById('botInput'),
+        closeBtn=document.getElementById('botClose');
+  if(!fab||!box)return;
+  const WA='https://wa.me/923271020389?text=Hi%20Jaweria%2C%20I%27d%20like%20to%20discuss%20a%20project.';
+  const wa='<a href="'+WA+'" target="_blank" rel="noopener">WhatsApp Jaweria</a>';
+  const answers={
+    services:{t:'Jaweria offers:\n• Graphic Design (posters, decks, campaigns)\n• UI/UX Design (websites, apps, landing pages)\n• Brand Identity (logos, visual systems)\n• Social Media Design (posts, carousels, ads)',go:'#services'},
+    work:{t:'You can browse selected projects in the Work section. Tap any card for the case study, or filter by Graphic, UI/UX, Branding or Campaigns.',go:'#work'},
+    process:{t:'The process is simple: Discover → Explore → Design → Refine. You get clear directions first, then polished, ready-to-use files.',go:'#home'},
+    reviews:{t:'Clients describe Jaweria as fast, communicative and detail-focused. Read their words in the Reviews section.',go:'#reviews'},
+    pricing:{t:'Pricing depends on the project size and deliverables. Share a few details through the contact form or message on WhatsApp for a quote.',go:'#contact'},
+    hire:{t:'Great! The quickest way is WhatsApp. You can also fill in the contact form and you\'ll get a reply by email.\n'+wa,go:'#contact'},
+    contact:{t:'You can reach Jaweria here:\n• '+wa+'\n• The contact form at the bottom of the page\n• Behance and LinkedIn links in the Contact section',go:'#contact'},
+    hello:{t:'Hi! I\'m here to help you find your way around. What would you like to know?'},
+    fallback:{t:'I\'m not sure about that one. I can tell you about services, projects, process, pricing or how to get in touch. For anything else, '+wa+' directly.'}
+  };
+  const keys=[['pricing',/price|cost|rate|quote|budget|how much|charge/],['hire',/hire|book|start|work with|order|available|project idea/],['contact',/contact|reach|email|whatsapp|phone|call|number|message/],['services',/service|offer|do you do|logo|brand|ui|ux|social|poster|design/],['work',/work|portfolio|project|sample|example|case/],['process',/process|how.*work|steps|timeline|deliver/],['reviews',/review|client|testimonial|feedback/],['hello',/^(hi|hello|hey|salam|assalam)/]];
+  const chipList=[['What do you offer?','services'],['See her work','work'],['Pricing','pricing'],['Hire Jaweria','hire'],['Contact','contact']];
+  function add(html,cls){const d=document.createElement('div');d.className='msg '+cls;if(cls==='user-msg')d.textContent=html;else d.innerHTML=html;body.appendChild(d);body.scrollTop=body.scrollHeight;}
+  function reply(key){const a=answers[key]||answers.fallback;setTimeout(()=>{add(a.t,'bot-msg');},350);if(a.go&&key!=='hire'&&key!=='contact'){/* no auto scroll; user stays in chat */}}
+  function ask(text,key){add(text,'user-msg');reply(key);}
+  function match(t){t=t.toLowerCase().trim();for(const [k,re] of keys){if(re.test(t))return k;}return 'fallback';}
+  chipList.forEach(([label,key])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.addEventListener('click',()=>ask(label,key));chips.appendChild(b);});
+  let started=false;
+  function setOpen(o){box.classList.toggle('open',o);box.setAttribute('aria-hidden',String(!o));fab.setAttribute('aria-expanded',String(o));
+    if(o&&!started){started=true;add('Hi, I\'m Jaweria\'s assistant 👋 Ask me anything about her services, projects or how to hire her.','bot-msg');}
+    if(o)input.focus();}
+  fab.addEventListener('click',()=>setOpen(!box.classList.contains('open')));
+  closeBtn.addEventListener('click',()=>setOpen(false));
+  form.addEventListener('submit',e=>{e.preventDefault();const t=input.value.trim();if(!t)return;input.value='';ask(t,match(t));});
+})();
