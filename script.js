@@ -116,35 +116,6 @@ document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
   resize();
 })();
 
-const navLinks=[...document.querySelectorAll('.desktop-nav a')];
-const sections=[...document.querySelectorAll('main section[id]')];
-function setActiveNav(id){
-  navLinks.forEach(link=>{
-    const active=link.getAttribute('href')==='#'+id;
-    link.classList.toggle('active',active);
-    if(active)link.setAttribute('aria-current','location');
-    else link.removeAttribute('aria-current');
-  });
-}
-function updateActiveNav(){
-  const marker=window.innerHeight*.4;
-  const orderedSections=sections
-    .map(section=>({section,top:section.getBoundingClientRect().top}))
-    .sort((a,b)=>a.top-b.top);
-  let current=orderedSections[0]?.section||sections[0];
-  orderedSections.forEach(({section,top})=>{
-    if(top<=marker)current=section;
-  });
-  setActiveNav(current.id);
-}
-navLinks.forEach(link=>link.addEventListener('click',()=>{
-  setActiveNav(link.getAttribute('href').slice(1));
-}));
-window.addEventListener('scroll',updateActiveNav,{passive:true});
-window.addEventListener('scrollend',updateActiveNav);
-window.addEventListener('resize',updateActiveNav);
-updateActiveNav();
-
 const projectCards=[...document.querySelectorAll('.project-card')];
 function applyProjectFilter(filter){
   let visibleNumber=0;
@@ -236,7 +207,8 @@ reviewCards.forEach(card=>{
 
 // Project cards open an in-site case-study screen instead of leaving the portfolio.
 const projectData={
-  zakriya:{category:'UI/UX · Mobile App · Web App',title:'Zakriya — Islamic Devotion & Dhikr App',intro:'A calm, devotion-focused mobile and web experience that brings prayer times, dhikr, Salawat gatherings and daily reflection into one place.',problem:'Daily worship tools are often scattered across several apps, which makes it hard to build a steady habit of prayer and remembrance.',solution:'I designed a clean, spiritual interface with a clear prayer-time dashboard, a simple tap-to-count dhikr session and a spiritual toolkit, alongside a web Majlis experience for live gatherings and shared goals.',role:'UX structure, mobile and web interface design, visual direction, iconography and prototyping.',tools:'Figma · UI/UX · Mobile app · Web app',behance:'https://www.behance.net/gallery/258613195/Zakriya-Islamic-Devotion-Dhikr-App',image:'assets/zakriya-cover.png'},
+  zakriya:{category:'UI/UX · Mobile App · Web App',title:'Zakriya — Islamic Devotion & Dhikr App',intro:'A calm, devotion-focused mobile and web experience that brings prayer times, dhikr, Salawat gatherings and daily reflection into one place.',problem:'Daily worship tools are often scattered across several apps, which makes it hard to build a steady habit of prayer and remembrance.',solution:'I designed a clean, spiritual interface with a clear prayer-time dashboard, a simple tap-to-count dhikr session and a spiritual toolkit, alongside a web Majlis experience for live gatherings and shared goals.',role:'UX structure, mobile and web interface design, visual direction, iconography and prototyping.',tools:'Figma · UI/UX · Mobile app · Web app',behance:'https://www.behance.net/gallery/258613195/Zakriya-Islamic-Devotion-Dhikr-App',image:'https://mir-s3-cdn-cf.behance.net/project_modules/1400/3447be258613195.6afc13d6e2e9d.png'},
+  barnsCafe:{category:'Graphic Design · Campaign',title:"Barn's Café Arabic Coffee Campaign Posters",intro:"A series of seven Arabic-first social media posters for Barn's Café, built around hospitality, heritage and the small rituals of a coffee cup.",problem:"The campaign needed a cohesive poster series that could express Barn's Café's hospitality and heritage while speaking naturally to an Arabic-speaking audience.",solution:"Warm desert light, rich textures and the brand's signature green tie the seven posters together into a consistent campaign.",role:'Campaign art direction, poster layout and graphic design.',tools:'Photoshop · Illustrator · Campaign design',behance:'https://www.behance.net/gallery/258937585/Barns-Caf-Arabic-Coffee-Campaign-Posters?platform=direct',image:'https://mir-s3-cdn-cf.behance.net/project_modules/1400/b4b3f3258937585.6b0511eb7b0f8.jpg'},
   nova:{category:'Campaign',title:'Nova Refresh',intro:'A vibrant campaign direction designed to give Nova Refresh a playful, energetic visual world.',problem:'The campaign needed a bold visual language that could feel memorable across social content while keeping the product easy to recognise.',solution:'I created a colourful campaign system with expressive compositions, clear product moments and a flexible layout language for digital promotion.',role:'Campaign concept, art direction, graphic design, composition and final social artwork.',tools:'Photoshop · Illustrator · Campaign design',behance:'[https://www.behance.net/gallery/255513933/Nova-Refresh-A-Vibrant-Multiverse-Campaign](https://www.behance.net/gallery/255513933/Nova-Refresh-A-Vibrant-Multiverse-Campaign)',image:'[https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/62a1f9255513933.Y3JvcCwxNDAwLDEwOTUsMCwxNTU.png](https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/62a1f9255513933.Y3JvcCwxNDAwLDEwOTUsMCwxNTU.png)'},
   streetwear:{category:'Social / Campaign',title:'Streetwear Social Media Campaign',intro:'A bold Instagram carousel system created to give a streetwear brand a stronger, more consistent social presence.',problem:'The campaign needed to communicate attitude and product value quickly while keeping every carousel slide recognisable as part of the same brand.',solution:'I built a high-impact visual direction with strong typography, product-focused compositions and a repeatable layout system that makes the campaign feel cohesive from the first slide to the last.',role:'Concept development, art direction, graphic design, layout, typography and final social-media-ready artwork.',tools:'Photoshop · Illustrator · Social media carousel design',behance:'[https://www.behance.net/gallery/254766415/Streetwear-Social-Media-Campaign-Instagram-Carousel-Ads](https://www.behance.net/gallery/254766415/Streetwear-Social-Media-Campaign-Instagram-Carousel-Ads)',image:'[https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/2b2ef2254766415.Y3JvcCwzODM1LDMwMDAsMzMyLDA.png](https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/2b2ef2254766415.Y3JvcCwzODM1LDMwMDAsMzMyLDA.png)'},
   nefa:{category:'Advertising Campaign',title:'Nefa Water — Summer Heat',intro:'A refreshing advertising concept designed to make a bottled-water campaign feel energetic, seasonal and instantly understandable.',problem:'The campaign needed to cut through busy summer advertising while keeping the product as the clear visual hero.',solution:'I combined a bright summer art direction with strong product placement, depth and clean messaging so the creative feels fresh without becoming cluttered.',role:'Creative direction, composition, retouching, typography and final advertising artwork.',tools:'Photoshop · Advertising design · Product composition',behance:'[https://www.behance.net/gallery/251043383/Nefa-Water-Beats-the-Summer-Heat-Advertising-Campaign](https://www.behance.net/gallery/251043383/Nefa-Water-Beats-the-Summer-Heat-Advertising-Campaign)',image:'[https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/f234f2251043383.Y3JvcCw4NzksNjg3LDAsOA.png](https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/f234f2251043383.Y3JvcCw4NzksNjg3LDAsOA.png)'},
